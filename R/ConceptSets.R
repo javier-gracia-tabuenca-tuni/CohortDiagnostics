@@ -330,6 +330,16 @@ exportConceptSets <- function(cohortDefinitionSet, exportFolder, minCellCount, d
   # We need to get concept sets from all cohorts in case subsets are present and
   # Added incrementally after cohort generation
   conceptSets <- combineConceptSetsFromCohorts(cohortDefinitionSet)
+  if(is.null(conceptSets)) {
+    conceptSets <- tibble::tibble(
+      uniqueConceptSetId = integer(),
+      cohortId = numeric(),
+      conceptSetId = numeric(),
+      conceptSetSql = character(),
+      conceptSetName = character(),
+      conceptSetExpression = character()
+    )   
+  }
   # Save concept set metadata ---------------------------------------
   conceptSetsExport <- makeDataExportable(
     x = conceptSets %>%
