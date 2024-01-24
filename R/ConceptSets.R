@@ -176,7 +176,16 @@ combineConceptSetsFromCohorts <- function(cohorts) {
     }
   }
   if (length(conceptSets) == 0) {
-    return(NULL)
+    return(
+      tibble::tibble(
+        uniqueConceptSetId = integer(),
+        cohortId = numeric(),
+        conceptSetId = numeric(),
+        conceptSetSql = character(),
+        conceptSetName = character(),
+        conceptSetExpression = character()
+      ) 
+    )
   }
   conceptSets <- dplyr::bind_rows(conceptSets) %>%
     dplyr::arrange(.data$cohortId, .data$conceptSetId)
@@ -330,16 +339,7 @@ exportConceptSets <- function(cohortDefinitionSet, exportFolder, minCellCount, d
   # We need to get concept sets from all cohorts in case subsets are present and
   # Added incrementally after cohort generation
   conceptSets <- combineConceptSetsFromCohorts(cohortDefinitionSet)
-  if(is.null(conceptSets)) {
-    conceptSets <- tibble::tibble(
-      uniqueConceptSetId = integer(),
-      cohortId = numeric(),
-      conceptSetId = numeric(),
-      conceptSetSql = character(),
-      conceptSetName = character(),
-      conceptSetExpression = character()
-    )   
-  }
+  
   # Save concept set metadata ---------------------------------------
   conceptSetsExport <- makeDataExportable(
     x = conceptSets %>%
@@ -422,7 +422,7 @@ runConceptSetDiagnostics <- function(connection,
   conceptSets <- combineConceptSetsFromCohorts(cohorts)
   conceptSets <- conceptSets %>% dplyr::filter(.data$cohortId %in% subset$cohortId)
 
-  if (is.null(conceptSets)) {
+  if (nrow(conceptSets)==0) {
     ParallelLogger::logInfo(
       "Cohorts being diagnosed does not have concept ids. Skipping concept set diagnostics."
     )
