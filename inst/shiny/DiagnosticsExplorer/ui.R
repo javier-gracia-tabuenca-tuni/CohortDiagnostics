@@ -153,8 +153,12 @@ cohortDiagnosticsUi <- function(id = "DiagnosticsExplorer",
     shinydashboard::sidebarMenu(
       id = ns("tabs"),
       shinydashboard::menuItem(text = "Cohort Definition", tabName = "cohortDefinition", icon = shiny::icon("code")),
-      shinydashboard::menuItem(text = "Concepts in Data Source", tabName = "conceptsInDataSource", icon = shiny::icon("table")),
-      shinydashboard::menuItem(text = "Orphan Concepts", tabName = "orphanConcepts", icon = shiny::icon("notes-medical")),
+      if ("conceptSets" %in% enabledReports) {
+        shinydashboard::menuItem(text = "Concepts in Data Source", tabName = "conceptsInDataSource", icon = shiny::icon("table"))
+      },
+      if ("orphanConcepts" %in% enabledReports) {
+        shinydashboard::menuItem(text = "Orphan Concepts", tabName = "orphanConcepts", icon = shiny::icon("notes-medical"))
+      },
       shinydashboard::menuItem(text = "Cohort Counts", tabName = "cohortCounts", icon = shiny::icon("bars")),
       shinydashboard::menuItem(text = "Incidence Rate", tabName = "incidenceRate", icon = shiny::icon("plus")),
       if ("temporalCovariateValue" %in% enabledReports) {
