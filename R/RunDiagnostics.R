@@ -439,7 +439,7 @@ executeDiagnostics <- function(cohortDefinitionSet,
 #          c(temporalCovariateSettings[[1]]$temporalEndDays, p1[2])
 #      }
 #    }
-#  }
+  }
 
   checkmate::reportAssertions(collection = errorMessage)
   if (!is.null(cohortIds)) {
